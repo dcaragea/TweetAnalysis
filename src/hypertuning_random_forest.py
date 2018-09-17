@@ -5,8 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from tqdm import tqdm
 
-train = pd.read_csv('/home/manny/PycharmProjects/TweetAnalysis/florida/training_data/supervised_data/utility/utility_supervised_rf_8.15.2018_MC.csv')
-train2 = pd.read_csv('/home/manny/PycharmProjects/TweetAnalysis/florida/training_data/supervised_data/utility/utility_supervised_new coding_1073.csv')
+train = pd.read_csv(r'C:\Users\abhidya\PycharmProjects\TweetAnalysis\florida\training_data\supervised_data\utility\utility_supervised_rf_8.15.2018_MC.csv')#, names=['Tweet','Manual Coding','Date','Permalink'])
+train2 = pd.read_csv(r'C:\Users\abhidya\PycharmProjects\TweetAnalysis\florida\training_data\supervised_data\utility\utility_supervised_new coding_1073.csv')#, names=['Tweet','Code','Category','Date','Permalink'])
 
 
 X = train['Tweet']
@@ -39,12 +39,12 @@ sum = 0
 # 5776061776061777
 # 5768339768339767
 
-X_train, X_test, y_train, y_test = train_test_split(X, y)
 
 tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, norm='l2', encoding='latin-1', ngram_range=(1, 2),
                         stop_words='english')
-X_train_tfidf = tfidf.fit_transform(X_train)
-X_test_tfidf = tfidf.transform(X_test)
+
+X_train = tfidf.fit_transform(X)
+
 import matplotlib.pyplot as plt
 
 from sklearn.grid_search import GridSearchCV
@@ -128,10 +128,15 @@ param_grid2 = {"n_estimators": [150,151,152,153,154,155,156,157,],
               "min_samples_leaf": [1,2,3,4, 5,],
               "max_leaf_nodes": [277, 278, 279, 280, 281, 282, 283, 284, 285 ],
               "min_weight_fraction_leaf": [0.1]}
+# param_grid2 = {"n_estimators": [153,154,155,],
+#               "max_depth": [63,64,65,66,67],
+#               "min_samples_split": [7,8,9],
+#               "min_samples_leaf": [2,3,4,],
+#               "max_leaf_nodes": [ 279, 280, 281, 282, ],
+#               "min_weight_fraction_leaf": [0.1]}
 
-
-grid_search = GridSearchCV(clf, param_grid=param_grid2, verbose=2)
-grid_search.fit(X_train_tfidf, y_train)
+grid_search = GridSearchCV(clf, param_grid=param_grid2, verbose=1)
+grid_search.fit(X_train, y)
 
 report(grid_search.grid_scores_, 10)
 
