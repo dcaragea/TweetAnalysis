@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 
-training_data_path = r"/home/manny/PycharmProjects/TweetAnalysis/florida/training_data/"
+training_data_path = r'C:\Users\abhidya\PycharmProjects\TweetAnalysis\florida/training_data/'
 
 tweets = []
 labels_list = []
@@ -22,13 +22,14 @@ for dirs, subdirs, files in os.walk(training_data_path):  #all data for supervis
             tweets.append(tweet)
 
 
-train = pd.read_csv('/home/manny/PycharmProjects/TweetAnalysis/DATA/T-06-Hurricane_Sandy_Labeled/2012_Sandy_Hurricane-ontopic_offtopic.csv', names = ['tweet id', 'tweet' , 'label'])
+train = pd.read_csv(r'C:\Users\abhidya\PycharmProjects\TweetAnalysis\DATA\T-06-Hurricane_Sandy_Labeled\2012_Sandy_Hurricane-ontopic_offtopic.csv', names = ['tweet id', 'tweet' , 'label'])
 
+train['label'] = train['label'].map({'on-topic': 1, 'off-topic': 0})
+train['label'] = train['label'].fillna(value=0)
 y = train['label']
 X = train['tweet']
 
 
-train['label'] = train['label'].map({'on-topic': 1, 'off-topic': 0})
 
 tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, norm='l2', encoding='latin-1', ngram_range=(1, 2),
                         stop_words='english')
